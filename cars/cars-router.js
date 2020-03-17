@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 			res.status(200).json(cars);
 		})
 		.catch(err => {
-			res.status(500).json({ error: 'Error retrieving cars.' });
+			res.status(500).json({ error: 'Error retrieving cars.', err });
 		});
 });
 router.get('/:id', (req, res) => {
@@ -21,7 +21,19 @@ router.get('/:id', (req, res) => {
 			} else {
 				res.status(200).json(car);
 			}
+		})
+		.catch(err => {
+			res.status(500).json({ error: 'Error retrieving car.', err });
 		});
 });
-
+router.post('/', (req, res) => {
+	db('cars')
+		.insert(req.body, 'id')
+		.then(id => {
+			res.status(201).json(id);
+		})
+		.catch(err => {
+			res.status(500).json({ error: 'Error posting car.', err });
+		});
+});
 module.exports = router;
